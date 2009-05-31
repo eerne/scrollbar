@@ -1,0 +1,39 @@
+#products {
+	position: relative;
+	height: 200px;
+	width: 802px;
+	overflow: hidden;
+}
+
+#products ul {
+	width: 2000px;
+}
+
+#products li {
+	color: #888;
+	float: left;
+	width: 200px;
+	position: relative;
+	font-size: 156px;
+	line-height: 200px;
+	text-align: center;
+	list-style-type: none;
+}
+
+#bar {
+	top: 0;
+	left: 7px;
+	width: 786px;
+	height: 21px;
+	position: relative;
+	background-color: #bbb;
+	-moz-border-radius: 10px;
+}
+
+#knob {
+	top: 1px;
+	width: 127px;
+	height: 19px;
+	background-color: white;
+	-moz-border-radius: 8px;
+}

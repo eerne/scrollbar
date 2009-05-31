@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Scrollbar</title>
+	<link href="Scrollbar.css" type="text/css" rel="stylesheet" charset="utf-8" />
+</head>
+<body>
+
+<p>
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<div id="products">
+	<ul><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li></ul>
+</div>
+<div id="bar"><div id="knob"></div></div>
+
+<script type="text/javascript" src="mootools-1.2.2-core-nc.js"></script>
+<script type="text/javascript" src="mootools-1.2.2.2-more-nc.js"></script>
+<script src="../Source/Plugins/Scrollbar.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+
+var myProducts = new ScrollBar($('products'), $('bar'), $('knob'), {
+	steps: 2000 - 786,
+	offset: -2
+});
+
+myProducts.set(200);
+
+</script>
+</body>
+</html>
