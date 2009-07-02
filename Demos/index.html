@@ -17,12 +17,12 @@
 </div>
 <div id="bar"><div id="knob"></div></div>
 
-<script type="text/javascript" src="mootools-1.2.2-core-nc.js"></script>
-<script type="text/javascript" src="mootools-1.2.2.2-more-nc.js"></script>
+<script type="text/javascript" src="mootools-1.2.3-core-yc.js"></script>
+<script type="text/javascript" src="mootools-1.2.3.1-more-nc.js"></script>
 <script src="../Source/Plugins/Scrollbar.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 
-var myProducts = new ScrollBar($('products'), $('bar'), $('knob'), {
+var myProducts = new ScrollBar(document.id('products'), document.id('bar'), document.id('knob'), {
 	steps: 2000 - 786,
 	offset: -2
 });
