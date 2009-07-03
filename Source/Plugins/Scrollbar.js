@@ -15,16 +15,21 @@ var ScrollBar = new Class({
 		slideable: {}
 	},
 	initialize: function(slideable, slider, knob, options){
+		this.knob = knob;
 		this.parent(slider, knob, options);
 		this.scroll = new Fx.Scroll(slideable, options.slideable);
 		this.addEvent('complete', function(event){
 			if (event.target != knob) this.move();
 		});
+		console.log(slideable.getFirst().getSize().x);
+		console.log(slideable.getSize().x);
+		console.log(slider.getSize().x);
+		console.log(knob.getSize().x);
+		this.ratio = ((2000-802)/657); // ScrollableWidth, Container, SliderWidth-KnobWidth
 	},
 	set: function(step){
-		this.parent(step);
-		if (this.options.mode === 'vertical') this.scroll.cancel().start(0, step ? step : this.step);
-		else this.scroll.cancel().start(step ? step : this.step);
+		this.knob.tween('left', step);
+		this.move(step*this.ratio);
 	},
 	move: function(step){
 		if (this.options.mode === 'vertical') this.scroll.cancel().start(0, step ? step : this.step);
@@ -34,5 +39,11 @@ var ScrollBar = new Class({
 		this.parent();
 		if (this.options.mode === 'vertical') this.scroll.cancel().set(0, this.step);
 		else this.scroll.cancel().set(this.step);
+	},
+	clickedElement: function(event){
+		if (event.target == this.knob) return;
+		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
+		position = position.limit(-this.options.offset, this.full -this.options.offset);
+		this.set(position);
 	}
 });

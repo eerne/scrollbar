@@ -8,9 +8,7 @@
 </head>
 <body>
 
-<p>
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</p>
+<a id="move" href="#">move somewhere</a>
 
 <div id="products">
 	<ul><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li></ul>
@@ -27,7 +25,11 @@ var myProducts = new ScrollBar(document.id('products'), document.id('bar'), docu
 	offset: -2
 });
 
-myProducts.set(200);
+// myProducts.set(200);
+
+document.id('move').addEvent('click', function(){
+	myProducts.set(400);
+});
 
 </script>
 </body>
