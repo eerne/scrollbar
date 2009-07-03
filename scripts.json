@@ -1,7 +1,7 @@
 {
 	"Plugin Type": {
 		"Scrollbar": {
-			"deps": ["Slider"],
+			"deps": ["Fx.Scroll", "Slider"],
 			"desc": "Lightweight Slider extention, that scrolls an element with overflow."
 		}
 	}
