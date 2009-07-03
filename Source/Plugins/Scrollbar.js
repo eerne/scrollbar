@@ -21,15 +21,12 @@ var ScrollBar = new Class({
 		this.addEvent('complete', function(event){
 			if (event.target != knob) this.move();
 		});
-		console.log(slideable.getFirst().getSize().x);
-		console.log(slideable.getSize().x);
-		console.log(slider.getSize().x);
-		console.log(knob.getSize().x);
-		this.ratio = ((2000-802)/657); // ScrollableWidth, Container, SliderWidth-KnobWidth
+		// this.ratio = ((2000-802)/657); // ScrollableWidth, Container, SliderWidth-KnobWidth
+		this.ratio = ((slideable.getFirst().getSize().x - slideable.getSize().x) / (slider.getSize().x - knob.getSize().x)); 
 	},
 	set: function(step){
 		this.knob.tween('left', step);
-		this.move(step*this.ratio);
+		this.move(step * this.ratio);
 	},
 	move: function(step){
 		if (this.options.mode === 'vertical') this.scroll.cancel().start(0, step ? step : this.step);
