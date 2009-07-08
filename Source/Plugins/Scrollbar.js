@@ -22,10 +22,11 @@ var ScrollBar = new Class({
 			if (event.target != knob) this.move();
 		});
 		// this.ratio = ((2000-802)/657); // ScrollableWidth, Container, SliderWidth-KnobWidth
-		this.ratio = ((slideable.getFirst().getSize().x - slideable.getSize().x) / (slider.getSize().x - knob.getSize().x)); 
+		this.ratio = ((slideable.getFirst().getSize()[this.axis] - slideable.getSize()[this.axis]) / (slider.getSize()[this.axis] - knob.getSize()[this.axis]));
 	},
 	set: function(step){
-		this.knob.tween('left', step);
+		if($type(step) === 'element') step = step.getPosition(step.getParent())[this.axis] / this.ratio;
+		this.knob.tween((this.options.mode === 'vertical') ? 'top' : 'left', step);
 		this.move(step * this.ratio);
 	},
 	move: function(step){

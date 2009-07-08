@@ -1,39 +1,40 @@
-#products {
-	position: relative;
-	height: 180px;
-	width: 802px;
-	overflow: hidden;
-}
-
-#products ul {
-	width: 2000px;
-}
-
-#products li {
-	color: #888;
+#vScroll {
 	float: left;
+	width: 200px;
+	height: 400px;
+	overflow: hidden;
+	position: relative;
+}
+
+#vScroll ul {
+	height: 2000px;
+}
+
+#vScroll li {
+	color: #888;
 	width: 200px;
 	position: relative;
 	font-size: 156px;
+	line-height: 200px;
 	text-align: center;
-	line-height: 180px;
 	list-style-type: none;
 }
 
-#bar {
+#vBar {
 	top: 0;
-	left: 100px;
-	width: 600px;
-	height: 21px;
+	left: 7px;
+	float: left;
+	width: 21px;
+	height: 400px;
 	position: relative;
 	background-color: #bbb;
 	-moz-border-radius: 10px;
 }
 
-#knob {
-	top: 1px;
-	width: 100px;
-	height: 19px;
+#vKnob {
+	left: 1px;
+	width: 19px;
+	height: 50px;
 	background-color: white;
 	-moz-border-radius: 8px;
 }
