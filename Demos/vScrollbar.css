@@ -29,6 +29,7 @@
 	position: relative;
 	background-color: #bbb;
 	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #vKnob {
@@ -37,6 +38,7 @@
 	height: 50px;
 	background-color: white;
 	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
 }
 
 * {
