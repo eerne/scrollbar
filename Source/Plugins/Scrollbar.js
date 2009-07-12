@@ -27,15 +27,17 @@ var ScrollBar = new Class({
 				this.axis = 'x';
 				this.property = 'left';
 		}
-		this.knob = knob.set('tween', options.fx);
-		this.parent(slider, this.knob, options);
-		this.scrollElement = scroller.getFirst();
-		this.steps = this.scrollElement.getSize()[this.axis] - scroller.getSize()[this.axis];
-		this.scroll = new Fx.Scroll(scroller, options.fx);
+		this.knob = document.id(knob).set('tween', options.fx);
+		this.slider = document.id(slider);
+		this.parent(this.slider, this.knob, options);
+		this.scroller = document.id(scroller);
+		this.scrollElement = this.scroller.getFirst();
+		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
+		this.scroll = new Fx.Scroll(this.scroller, options.fx);
 		/*this.addEvent('complete', function(event){
 			if (event.target !== knob) this.move();
 		});*/
-		this.ratio = this.steps / (slider.getSize()[this.axis] - knob.getSize()[this.axis]);
+		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
 	},
 
 	set: function(step){
@@ -61,7 +63,7 @@ var ScrollBar = new Class({
 			return;
 		}
 		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
-		//position = position.limit(-this.options.offset, this.full -this.options.offset);
+		position = position.limit(-this.options.offset, this.full -this.options.offset);
 		this.set(position);
 	}
 

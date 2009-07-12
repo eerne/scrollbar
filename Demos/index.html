@@ -11,6 +11,8 @@
 </head>
 <body>
 
+<h1>The Product Browser</h1>
+
 this is a work in progress version. checkout the latest on github: <a href="http://github.com/eerne/scrollbar/tree/master">http://github.com/eerne/scrollbar/tree/master</a><br />
 
 <a id="move" href="#">move knob (i.e. 10px from left)</a><br />
@@ -21,7 +23,7 @@ this is a work in progress version. checkout the latest on github: <a href="http
 
 <script type="text/javascript" charset="utf-8">
 window.addEvent('domready', function(){
-	var myProducts = new ScrollBar(document.id('products'), document.id('bar'), document.id('knob'), {
+	var myProducts = new ScrollBar('products', 'bar', 'knob', {
 		offset: -2,
 		fx: {
 			duration: 2500,
@@ -51,18 +53,18 @@ window.addEvent('domready', function(){
 });
 </script>
 
-
+<h1>The ScrollBar</h1>
 
 <div id="vScroll"><ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ul></div>
 <div id="vBar"><div id="vKnob"></div></div>
 
 <script type="text/javascript" charset="utf-8">
 window.addEvent('domready', function(){
-	var myVProducts = new ScrollBar(document.id('vScroll'), document.id('vBar'), document.id('vKnob'), {
+	var myVProducts = new ScrollBar('vScroll', 'vBar', 'vKnob', {
 		mode: 'vertical',
 		offset: -2
 	});
-	// myVProducts.set(200);
+	myVProducts.set(200);
 });
 </script>
 
