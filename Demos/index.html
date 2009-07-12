@@ -22,7 +22,11 @@ this is a work in progress version. checkout the latest on github: <a href="http
 <script type="text/javascript" charset="utf-8">
 window.addEvent('domready', function(){
 	var myProducts = new ScrollBar(document.id('products'), document.id('bar'), document.id('knob'), {
-		offset: -2
+		offset: -2,
+		fx: {
+			duration: 2500,
+			transition: 'elastic:out' // Fx.Transitions.Pow.easeOut
+		}
 	});
 	
 	myProducts.set(200);

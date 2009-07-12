@@ -14,23 +14,32 @@ var ScrollBar = new Class({
 	Extends: Slider,
 
 	options: {
-		slideable: {}
+		fx: {}
 	},
 
-	initialize: function(slideable, slider, knob, options){
-		this.knob = knob;
-		this.parent(slider, knob, options);
-		this.innerSlideable = slideable.getFirst();
-		this.steps = this.innerSlideable.getSize()[this.axis] - slideable.getSize()[this.axis];
-		this.scroll = new Fx.Scroll(slideable, options.slideable);
-		this.addEvent('complete', function(event){
-			if (event.target != knob) this.move();
-		});
+	initialize: function(scroller, slider, knob, options){
+		switch (this.options.mode){
+			case 'vertical':
+				this.axis = 'y';
+				this.property = 'top';
+				break;
+			case 'horizontal':
+				this.axis = 'x';
+				this.property = 'left';
+		}
+		this.knob = knob.set('tween', options.fx);
+		this.parent(slider, this.knob, options);
+		this.scrollElement = scroller.getFirst();
+		this.steps = this.scrollElement.getSize()[this.axis] - scroller.getSize()[this.axis];
+		this.scroll = new Fx.Scroll(scroller, options.fx);
+		/*this.addEvent('complete', function(event){
+			if (event.target !== knob) this.move();
+		});*/
 		this.ratio = this.steps / (slider.getSize()[this.axis] - knob.getSize()[this.axis]);
 	},
 
 	set: function(step){
-		if($type(step) === 'element') step = step.getPosition(this.innerSlideable)[this.axis] / this.ratio;
+		if($type(step) === 'element') step = step.getPosition(this.scrollElement)[this.axis] / this.ratio;
 		this.knob.tween(this.property, step);
 		this.move(step * this.ratio);
 	},
@@ -47,9 +56,12 @@ var ScrollBar = new Class({
 	},
 
 	clickedElement: function(event){
-		if (event.target == this.knob) return;
+		if (event.target == this.knob) {
+			this.knob.get('tween').cancel();
+			return;
+		}
 		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
-		position = position.limit(-this.options.offset, this.full -this.options.offset);
+		//position = position.limit(-this.options.offset, this.full -this.options.offset);
 		this.set(position);
 	}
 
