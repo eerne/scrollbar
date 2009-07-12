@@ -1,7 +1,7 @@
 Class: ScrollBar {#ScrollBar}
 ===============================
 
-Documentation is not done yet
+Expect some API changes, it is still BETA!
 
 ### Notes:
 
@@ -14,11 +14,12 @@ Documentation is not done yet
 
 ### Syntax:
 
-	var yourProductSlider = new ProductSlider([options]);
+	var myProductBrowser = new ScrollBar('products', 'bar', 'knob'[, options]);
 
 ### Arguments:
 
-1. options  - (*object*, optional) All the [Events][] options in addition to options below.
+1. options  - are directly passed to the Slider call see also http://mootools.net/docs/more/Drag/Slider
+2. fx  - fx is passed to Fx.Scroll for the moment but likely to change 
 
 #### Options:
 
@@ -29,7 +30,7 @@ Documentation is not done yet
 
 ### Returns:
 
-* (*object*) A new PluginName instance.
+* (*object*) A new ScrollBar instance.
 
 ## Events:
 
@@ -48,11 +49,14 @@ Documentation is not done yet
 
 ### Examples:
 
-	var myThing = new PluginName({
-		optionl: 1,
-		option8: true
+	var myProducts = new ScrollBar('products', 'bar', 'knob', {
+		offset: -2,
+		fx: {
+			duration: 2500,
+			transition: 'elastic:out'
+		}
 	});
 
 ### Demos:
 
-- PluginName - <http://demos.mootools.net/PluginName>
+- ScrollBar - <http://mild.ch/productslider/>
