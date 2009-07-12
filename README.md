@@ -21,4 +21,4 @@ Usage
 License
 -------
 
-See [license](master/license) file.
+MIT [license](master/LICENSE)
