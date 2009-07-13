@@ -1,6 +1,6 @@
 /*
 Script: Scrollbar.js
-    Scrollbar
+    Scrollbar 0.9.1
 
 License:
 	MIT-style license.
@@ -40,10 +40,11 @@ var ScrollBar = new Class({
 		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
 	},
 
-	set: function(step){
-		if($type(step) === 'element') step = step.getPosition(this.scrollElement)[this.axis] / this.ratio;
-		this.knob.tween(this.property, step);
-		this.move(step * this.ratio);
+	set: function(position){
+		if($type(position) === 'element') position = position.getPosition(this.scrollElement)[this.axis] / this.ratio;
+		position = position.limit(-this.options.offset, this.full -this.options.offset);
+		this.move(position * this.ratio);
+		this.knob.tween(this.property, position);
 	},
 
 	move: function(step){
