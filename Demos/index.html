@@ -24,7 +24,13 @@ move to element <a id="move1st" href="#">1st</a> <a id="move2nd" href="#">2nd</a
 <script type="text/javascript" charset="utf-8">
 window.addEvent('domready', function(){
 	var myProducts = new ScrollBar('products', 'bar', 'knob', {
-		offset: -2,
+		offset: 0,
+		onChange: function(){
+			// console.log('change');
+		},
+		onComplete: function(){
+			// console.log('done');
+		},
 		fx: {
 			duration: 2500,
 			transition: 'elastic:out' // Fx.Transitions.Pow.easeOut
