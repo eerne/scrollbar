@@ -11,33 +11,55 @@
 </head>
 <body>
 
-<h1>The Product Browser Beta 3</h1>
+<h1>The Product Browser Beta 4</h1>
 
-this is a work in progress version. checkout the latest on github: <a href="http://github.com/eerne/scrollbar/tree/master">http://github.com/eerne/scrollbar/tree/master</a><br />
+Todo:
+<ul>
+<li>Add full events support i.e. when using .set() or click on the bar</li>
+<li>Get a moodev to review code i.e. options for Slider and for Fx.Scroll</li>
+<li>Tag Alpha, Beta and RC1</li>
+</ul>
+
+Checkout the latest on github: <a href="http://github.com/eerne/scrollbar/tree/master">http://github.com/eerne/scrollbar/tree/master</a><br />
 
 move knob to <a id="move0" href="#">0px</a> <a id="move10" href="#">10px</a> <a id="move100" href="#">100px</a> <a id="move1000" href="#">1000px</a><br />
 move to element <a id="move1st" href="#">1st</a> <a id="move2nd" href="#">2nd</a> <a id="move3rd" href="#">3rd</a>
 
-<div id="products"><ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ul></div>
+<div id="products"><ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li></ul></div>
 <div id="bar"><div id="knob"></div><a href="#" id="theSixth">goto 6th</a></div>
 
 <script type="text/javascript" charset="utf-8">
 window.addEvent('domready', function(){
 	var myProducts = new ScrollBar('products', 'bar', 'knob', {
-		offset: 0,
-		onChange: function(){
-			// console.log('change');
+		scroll: {
+			duration: 2000,
+			transition: 'elastic:out',
+			onStart: function(){
+			//	console.log('start ' + this.to[0]);
+			},
+			onComplete: function(){
+			//	console.log('complete ' + this.to[0]);
+			}
 		},
-		onComplete: function(){
-			// console.log('done');
+		slider: {
+			offset: -1,
+			onChange: function(pos){
+			//	console.log('change ' + pos);
+			},
+			onComplete: function(pos){
+			//	console.log('complete ' + pos);
+			}
 		},
-		fx: {
-			duration: 2500,
-			transition: 'elastic:out' // Fx.Transitions.Pow.easeOut
+		knob: {
+			duration: 1200,
+			transition: 'elastic:out',
+			onStart: function(){
+			//	console.log('start ' + this.to[0].value); // knob position
+			}
 		}
 	});
 	
-	myProducts.set(200);
+	myProducts.set(50);
 	
 	document.id('move0').addEvent('click', function(){ myProducts.set(0); });
 	document.id('move10').addEvent('click', function(){ myProducts.set(10); });
@@ -68,13 +90,17 @@ window.addEvent('domready', function(){
 <div id="vBar"><div id="vKnob"></div></div>
 
 <script type="text/javascript" charset="utf-8">
+
 window.addEvent('domready', function(){
 	var myVProducts = new ScrollBar('vScroll', 'vBar', 'vKnob', {
-		mode: 'vertical',
-		offset: -2
+		slider: {
+			mode: 'vertical',
+			offset: -1
+		}
 	});
 	myVProducts.set(200);
 });
+
 </script>
 
 

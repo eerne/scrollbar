@@ -1,6 +1,6 @@
 /*
 Script: Scrollbar.js
-    Scrollbar 0.9.1
+    Scrollbar 0.9.3
 
 License:
 	MIT-style license.
@@ -10,26 +10,32 @@ Copyright:
 
 */
 
-
-	
 var ScrollBar = new Class({
 	
 	Extends: Slider,
 
 	options: {
-		fx: {}
+		scroll: {/*
+			onStart: $empty(),
+			onComplete: $empty()*/
+		},
+		slider: {/*
+			onChange: $empty(intStep),
+			onComplete: $empty(strStep)*/
+		},
+		knob: {/*
+			onStart: $empty()*/
+		}
 	},
 
-	initialize: function(scroller, slider, knob, options){/*
-		onChange: $empty(intStep),
-		onComplete: $empty(strStep),*/
-		this.knob = document.id(knob).set('tween', options.fx);
+	initialize: function(scroller, slider, knob, options){
+		this.knob = document.id(knob).set('tween', options.knob);
 		this.slider = document.id(slider);
 		this.scroller = document.id(scroller);
 		this.scrollElement = this.scroller.getFirst();
-		this.parent(this.slider, this.knob, options);
+		this.parent(this.slider, this.knob, options.slider);
 		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
-		this.scroll = new Fx.Scroll(this.scroller, options.fx);
+		this.scroll = new Fx.Scroll(this.scroller, options.scroll);
 		/*this.addEvent('complete', function(event){
 			if (event.target !== knob) this.move();
 		});*/
@@ -40,8 +46,9 @@ var ScrollBar = new Class({
 		if($type(position) === 'element') position = position.getPosition(this.scrollElement)[this.axis] / this.ratio;
 		position = position.limit(-this.options.offset, this.full -this.options.offset);
 		this.move(position * this.ratio);
-		this.knob.tween(this.property, position)
-		// this.fireEvent('complete', this.step + '');
+		this.knob.tween(this.property, position).get('tween').chain(function(){
+			this.fireEvent('complete', Math.round(position * this.ratio) + '');
+		}.bind(this));
 	},
 
 	move: function(position){
