@@ -1,6 +1,6 @@
 /*
 Script: Scrollbar.js
-    Scrollbar 0.9.3
+    Scrollbar 0.9.4
 
 License:
 	MIT-style license.
@@ -16,15 +16,15 @@ var ScrollBar = new Class({
 
 	options: {
 		scroll: {/*
-			onStart: $empty(),
-			onComplete: $empty()*/
+			onStart: $empty,
+			onComplete: $empty*/
 		},
 		slider: {/*
 			onChange: $empty(intStep),
 			onComplete: $empty(strStep)*/
 		},
 		knob: {/*
-			onStart: $empty()*/
+			onStart: $empty*/
 		}
 	},
 
