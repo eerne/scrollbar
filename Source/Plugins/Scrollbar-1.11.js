@@ -38,19 +38,19 @@ var ScrollBar = Slider.extend({
 		this.scroller = $(scroller);
 		this.scrollElement = this.scroller.getFirst();
 		this.parent(this.slider, this.knob, options.slider);
-		this.steps = this.scrollElement.getSize().size[this.z] - this.scroller.getSize().size[this.z];
-		this.ratio = this.steps / (this.slider.getSize().size[this.z] - this.knob.getSize().size[this.z]);
+		this.steps = (this.scrollElement.getSize().size[this.z] - this.scroller.getSize().size[this.z]);
+		this.ratio = this.steps / (this.slider.getSize().size[this.z] - this.knob.getSize().size[this.z] + 2*this.options.offset);
 		this.options.scroll.duration = this.options.scroll.duration;
 		this.scroll = new Fx.Scroll(this.scroller, options.scroll);
 		this.knob.fx = new Fx.Style(this.knob, this.p, options.knob);
-		this.knob.fx.set(0);
+		this.knob.fx.set(-this.options.offset);
 	},
 
 	set: function(position){
 		this.scroll.options.duration = this.options.scroll.duration;
-		if($type(position) === 'element') position = position.getPosition()[this.z] / this.ratio;
+		//if($type(position) === 'element') position = (position.getPosition()[this.z] - this.scroller.getPosition()[this.z]) / this.ratio;
 		position = position.limit(-this.options.offset, this.max -this.options.offset);
-		this.move(position * this.ratio);
+		this.move((position * this.ratio) + (2 * this.options.offset));
 		this.knob.fx.stop().start(this.knob.fx.now, position).chain(function(){
 			this.fireEvent('complete', Math.round(position * this.ratio) + '');
 		});
@@ -67,9 +67,9 @@ var ScrollBar = Slider.extend({
 		this.parent();
 		var position = this.drag.value.now[this.z] * this.ratio;
 		this.scroll.options.duration = 0;
-		if (this.options.mode === 'vertical') this.scroll.scrollTo(0, position);
-		else this.scroll.scrollTo(position, 0);
-		this.knob.fx.now = position / this.ratio;
+		if (this.options.mode === 'vertical') this.scroll.scrollTo(0, position + this.options.offset);
+		else this.scroll.scrollTo(position + 2*this.options.offset, 0);
+		this.knob.fx.now = (position) / this.ratio;
 	},
 
 	clickedElement: function(event){
@@ -80,6 +80,7 @@ var ScrollBar = Slider.extend({
 		this.scroll.options.duration = this.options.scroll.duration;
 		var position = event.page[this.z] - this.element.getPosition()[this.z] - this.half;
 		position = position.limit(-this.options.offset, this.max -this.options.offset);
+		//console.log(position);
 		this.set(position);
 	}
 

@@ -7,6 +7,8 @@
 
 #products ul {
 	width: 3000px;
+	height: 180px;
+	background-color: #ddd;
 }
 
 #products li {
@@ -18,6 +20,7 @@
 	text-align: center;
 	line-height: 180px;
 	list-style-type: none;
+	background-color: white;
 }
 
 #bar {
