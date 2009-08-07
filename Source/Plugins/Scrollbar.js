@@ -52,8 +52,9 @@ var ScrollBar = new Class({
 	},
 
 	move: function(position){
-		if (this.options.mode === 'vertical') this.scroll.cancel().start(0, $chk(position) ? position : this.step);
-		else this.scroll.cancel().start($chk(position) ? position : this.step);
+		var to = $chk(position) ? position : this.step;
+		if (this.options.mode === 'vertical') this.scroll.cancel().start(0, to);
+		else this.scroll.cancel().start(to, 0);
 	},
 
 	draggedKnob: function(){
