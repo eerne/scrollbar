@@ -1,6 +1,6 @@
 /*
 Script: Scrollbar.js
-    Scrollbar 0.9.4
+    Scrollbar 0.9.5
 
 License:
 	MIT-style license.
@@ -36,9 +36,6 @@ var ScrollBar = new Class({
 		this.parent(this.slider, this.knob, options.slider);
 		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
 		this.scroll = new Fx.Scroll(this.scroller, options.scroll);
-		/*this.addEvent('complete', function(event){
-			if (event.target !== knob) this.move();
-		});*/
 		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
 	},
 
@@ -64,7 +61,7 @@ var ScrollBar = new Class({
 	},
 
 	clickedElement: function(event){
-		if (event.target === this.knob) {
+		if (event.target === this.knob){
 			this.knob.get('tween').cancel();
 			return;
 		}
