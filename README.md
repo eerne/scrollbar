@@ -3,6 +3,8 @@ Scrollbar
 
 A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
 
+![Screenshot](http://mild.ch/assets/images/scrollbar/snip.png)
+
 Features
 --------
 
