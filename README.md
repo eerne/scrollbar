@@ -13,8 +13,8 @@ Features
  * Lightweight
  * Cross-Browser Compatible
 
-Usage
------
+How to use
+----------
 
 	var myProductbrowser = new ScrollBar('products', 'bar', 'knob'[, options]);
 

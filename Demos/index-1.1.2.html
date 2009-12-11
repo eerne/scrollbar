@@ -5,9 +5,8 @@
 	<title>Scrollbar</title>
 	<link href="Scrollbar.css" type="text/css" rel="stylesheet" charset="utf-8" />
 	<link href="vScrollbar.css" type="text/css" rel="stylesheet" charset="utf-8" />
-	<script type="text/javascript" src="mootools-1.2.4-core-yc.js"></script>
-	<script type="text/javascript" src="mootools-1.2.4.2-more.js"></script>
-	<script src="../Source/Scrollbar.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="mootools-1.1.2-yc.js"></script>
+	<script src="../Source/Scrollbar-1.1.2.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 
@@ -18,8 +17,6 @@
 <h2>Example:</h2>
 
 move knob to <a id="move0" href="#">0px</a> <a id="move10" href="#">10px</a> <a id="move100" href="#">100px</a> <a id="move1000" href="#">1000px</a><br />
-move to element <a id="move1st" href="#">1st</a> <a id="move2nd" href="#">2nd</a> <a id="move3rd" href="#">3rd</a><br />
-<!--a id="getPos" href="#">console.log(position)</a-->
 
 <div id="products"><ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li></ul></div>
 <div id="bar"><div id="knob"></div><a href="#" id="theSixth">goto 6th</a></div>
@@ -29,7 +26,7 @@ window.addEvent('domready', function(){
 	var myProducts = new ScrollBar('products', 'bar', 'knob', {
 		scroll: {
 			duration: 2000,
-			transition: 'elastic:out',
+			transition: Fx.Transitions.Elastic.easeOut,
 			onStart: function(){
 			//	console.log('start ' + this.to[0]);
 			},
@@ -48,38 +45,28 @@ window.addEvent('domready', function(){
 		},
 		knob: {
 			duration: 1200,
-			transition: 'elastic:out',
+			transition: Fx.Transitions.Elastic.easeOut,
 			onStart: function(){
 			//	console.log('start ' + this.to[0].value); // knob position
 			}
 		}
 	});
-	
 	myProducts.set(50);
 	
-	document.id('move0').addEvent('click', function(){ myProducts.set(0); });
-	document.id('move10').addEvent('click', function(){ myProducts.set(10); });
-	document.id('move100').addEvent('click', function(){ myProducts.set(100); });
-	document.id('move1000').addEvent('click', function(){ myProducts.set(1000); });
+	$('move0').addEvent('click', function(){ myProducts.set(0); });
+	$('move10').addEvent('click', function(){ myProducts.set(10); });
+	$('move100').addEvent('click', function(){ myProducts.set(100); });
+	$('move1000').addEvent('click', function(){ myProducts.set(1000); });
 	
-	var products = $$('#products li');
-	document.id('move1st').addEvent('click', function(){ myProducts.set(products[0]); });
-	document.id('move2nd').addEvent('click', function(){ myProducts.set(products[1]); });
-	document.id('move3rd').addEvent('click', function(){ myProducts.set(products[2]); });
-	
-	
-	/*document.id('getPos').addEvent('click', function(){
-		console.log(myProducts.steps);
-	});*/
 	
 	
 	// if your link is on the slider
-	document.id('theSixth').addEvents({
+	$('theSixth').addEvents({
 		'mousedown': function(event){
-			event.stop();
+			if(!window.ie) event.stopPropagation();
 		},
 		'click': function(){
-			myProducts.set(products[5]);
+			myProducts.set(212);
 		}
 	});
 	
@@ -88,14 +75,13 @@ window.addEvent('domready', function(){
 
 <h1>The ScrollBar</h1>
 
-move a bit to the <a id="aBitToTop" href="#">top</a> <a id="aBitToBottom" href="#">bottom</a><br />
-
 <div id="vScroll"><ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ul></div>
 <div id="vBar"><div id="vKnob"></div></div>
 
 <script type="text/javascript" charset="utf-8">
 
 window.addEvent('domready', function(){
+	
 	var myVProducts = new ScrollBar('vScroll', 'vBar', 'vKnob', {
 		slider: {
 			mode: 'vertical',
@@ -103,15 +89,7 @@ window.addEvent('domready', function(){
 		}
 	});
 	myVProducts.set(200);
-	
-	document.id('aBitToTop').addEvent('click', function(e){
-		e.stop();
-		myVProducts.move2(-50);
-	});
-	document.id('aBitToBottom').addEvent('click', function(e){
-		e.stop();
-		myVProducts.move2(50);
-	});
+
 });
 
 </script>
