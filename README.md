@@ -1,8 +1,6 @@
 Scrollbar
 =========
 
-Description
------------
 A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
 
 Features
