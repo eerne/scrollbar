@@ -38,6 +38,10 @@ var ScrollBar = new Class({
 		this.scroll = new Fx.Scroll(this.scroller, options.scroll);
 		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
 	},
+	
+	move2: function(amount){
+		this.set(this.knob.getPosition(this.slider)[this.axis] + amount);
+	},
 
 	set: function(position){
 		if($type(position) === 'element') position = position.getPosition(this.scrollElement)[this.axis] / this.ratio;

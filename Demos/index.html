@@ -67,6 +67,7 @@ window.addEvent('domready', function(){
 	document.id('move2nd').addEvent('click', function(){ myProducts.set(products[1]); });
 	document.id('move3rd').addEvent('click', function(){ myProducts.set(products[2]); });
 	
+	
 	/*document.id('getPos').addEvent('click', function(){
 		console.log(myProducts.steps);
 	});*/
@@ -87,6 +88,8 @@ window.addEvent('domready', function(){
 
 <h1>The ScrollBar</h1>
 
+move a bit to the <a id="aBitToTop" href="#">top</a> <a id="aBitToBottom" href="#">bottom</a><br />
+
 <div id="vScroll"><ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ul></div>
 <div id="vBar"><div id="vKnob"></div></div>
 
@@ -100,6 +103,15 @@ window.addEvent('domready', function(){
 		}
 	});
 	myVProducts.set(200);
+	
+	document.id('aBitToTop').addEvent('click', function(e){
+		e.stop();
+		myVProducts.move2(-50);
+	});
+	document.id('aBitToBottom').addEvent('click', function(e){
+		e.stop();
+		myVProducts.move2(50);
+	});
 });
 
 </script>
