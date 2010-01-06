@@ -10,7 +10,8 @@ license: MIT License
 authors:
 - Enrique Erne
 
-requires: Core/1.1.2
+requires:
+
 provides: ScrollBar
  
 ...
