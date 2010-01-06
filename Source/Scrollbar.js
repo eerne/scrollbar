@@ -10,7 +10,10 @@ license: MIT License
 authors:
 - Enrique Erne
 
-requires: Core/1.2.4
+requires:
+core/1.2.4: '*'
+more/1.2.4.2: [Fx.Scroll, Slider]
+
 provides: ScrollBar
  
 ...
