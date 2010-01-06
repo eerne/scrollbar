@@ -11,8 +11,8 @@ authors:
 - Enrique Erne
 
 requires:
-core/1.2.4: '*'
-more/1.2.4.2: [Fx.Scroll, Slider]
+  core/1.2.4: '*'
+  more/1.2.4.2: [Fx.Scroll, Slider]
 
 provides: ScrollBar
  
