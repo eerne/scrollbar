@@ -24,11 +24,14 @@ var ScrollBar = new Class({
 	Extends: Slider,
 
 	options: {
-		scroll: {/*
+		scroll: {
+			wheelStops: false/*
 			onStart: $empty,
 			onComplete: $empty*/
 		},
-		slider: {/*
+		slider: {
+			mode: 'horizontal',
+			wheel: true/*
 			onChange: $empty(intStep),
 			onComplete: $empty(strStep)*/
 		},
@@ -45,6 +48,9 @@ var ScrollBar = new Class({
 		this.parent(this.slider, this.knob, $extend(this.options.slider, options.slider));
 		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
 		this.scroll = new Fx.Scroll(this.scroller, $extend(this.options.scroll, options.scroll));
+		this.scroller.addEvent('mousewheel', function(event){
+			this.element.fireEvent('mousewheel', event);
+		}.bind(this));
 		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
 	},
 	
@@ -81,6 +87,12 @@ var ScrollBar = new Class({
 		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
 		position = position.limit(-this.options.offset, this.full -this.options.offset);
 		this.set(position);
+	},
+	
+	scrolledElement: function(event){
+		var mode = (this.options.mode == 'horizontal') ? (event.wheel < 0) : (event.wheel > 0);
+		this.move2(mode ? -this.stepSize * 100 : this.stepSize * 100);
+		event.stop();
 	}
 
 });
