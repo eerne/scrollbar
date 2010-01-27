@@ -42,9 +42,9 @@ var ScrollBar = new Class({
 		this.slider = document.id(slider);
 		this.scroller = document.id(scroller);
 		this.scrollElement = this.scroller.getFirst();
-		this.parent(this.slider, this.knob, options.slider);
+		this.parent(this.slider, this.knob, $extend(this.options.slider, options.slider));
 		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
-		this.scroll = new Fx.Scroll(this.scroller, options.scroll);
+		this.scroll = new Fx.Scroll(this.scroller, $extend(this.options.scroll, options.scroll));
 		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
 	},
 	
