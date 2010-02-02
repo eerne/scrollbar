@@ -5,10 +5,9 @@ A simple Apple-style productbrowser, that extends Slider using a container with 
 
 ![Screenshot](http://mild.ch/assets/images/scrollbar/snip.png)
 
-Features
---------
+### Features
 
- * **new mouse wheel support
+ * **new** mouse wheel support
  * Animated scrolling
  * Flexible
  * Lightweight
@@ -25,19 +24,9 @@ First argument should contain an element with an overflow, for example all your 
 
 Split into three parts
 
- * **scroll : see [Fx.Scroll](http://mootools.net/docs/more/Fx/Fx.Scroll)
- * **slider : see [Slider](http://mootools.net/docs/more/Drag/Slider)
- * **knob : options for the Tween instance of the slider knob, see [Fx.Tween](http://mootools.net/docs/core/Fx/Fx.Tween) and [Fx](http://mootools.net/docs/core/Fx/Fx)
-
-License
--------
-
-MIT [license](LICENSE)
-
-Changelog
----------
-
- * added mouse wheel support
+ * **scroll**: see [Fx.Scroll](http://mootools.net/docs/more/Fx/Fx.Scroll)
+ * **slider**: see [Slider](http://mootools.net/docs/more/Drag/Slider)
+ * **knob**: options for the Tween instance of the slider knob, see [Fx.Tween](http://mootools.net/docs/core/Fx/Fx.Tween) and [Fx](http://mootools.net/docs/core/Fx/Fx)
 
 Todo
 ----
@@ -45,3 +34,9 @@ Todo
  * code review (anyone?)
  * discuss API
  * mooshell demo
+ 
+Changelog
+---------
+
+ * added mouse wheel support
+ * backported to MooTools 1.11
