@@ -4,7 +4,7 @@
 name: Scrollbar
 description: A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
 
-version: 0.9.6
+version: 0.9.7
 copyright: Enrique Erne (http://mild.ch)
 license: MIT License
 authors:
