@@ -4,15 +4,13 @@
 name: Scrollbar
 description: A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
 
-version: 0.9.7
+version: 0.9.8
 copyright: Enrique Erne (http://mild.ch)
 license: MIT License
 authors:
 - Enrique Erne
 
-requires:
-  core/1.2.4: [Class, Element.Event, Element.Dimensions, Fx.Tween, Fx.Transitions, Selectors]
-  more/1.2.4.4: [Fx.Scroll, Slider]
+requires: [Core/Class, Core/Element.Event, Core/Element.Dimensions, Core/Fx.Tween, Core/Fx.Transitions, Core/Selectors, More/Fx.Scroll, More/Slider]
 
 provides: ScrollBar
  
