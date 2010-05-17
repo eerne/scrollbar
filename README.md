@@ -3,7 +3,7 @@ MooTools Scrollbar
 
 A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
 
-![Screenshot](http://mild.ch/assets/images/scrollbar/snip.png)
+![Screenshot](http://www.mild.ch/assets/images/scrollbar/snip.png)
 
 ### Features
 
@@ -33,10 +33,10 @@ Todo
 
  * code review (anyone?)
  * discuss API
- * mooshell demo
  
 Changelog
 ---------
 
  * added mouse wheel support
  * backported to MooTools 1.11
+ * added to MooTools 1.3 ßeta 1 example
