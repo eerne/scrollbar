@@ -12,12 +12,7 @@ license: "MIT License"
 copyright: "&copy; 2010, Enrique Erne"
 
 sources:
-  - "Source/Meio.Mask.js"
-  - "Source/Meio.Mask.Fixed.js"
-  - "Source/Meio.Mask.Regexp.js"
-  - "Source/Meio.Mask.Reverse.js"
-  - "Source/Meio.Mask.Repeat.js"
-  - "Source/Meio.Mask.Extras.js"
+  - "Source/Scrollbar.js"
 
 # Values for MooTools forge
 
