@@ -13,6 +13,10 @@ A simple Apple-style productbrowser, that extends Slider using a container with 
  * Lightweight
  * Cross-Browser Compatible
 
+### Submit examples on the wiki 
+
+If you have a working scrollbar online add your link to [github.com/eerne/scrollbar/wiki](http://github.com/eerne/scrollbar/wiki)
+
 How to use
 ----------
 
@@ -31,8 +35,10 @@ Split into three parts
 Todo
 ----
 
- * code review (anyone?)
+ * code review
  * discuss API
+ * remove Fx.Scroll dependecy (Version 2.0)
+ * update to MooTools 1.3 (without compatibility)
  
 Changelog
 ---------
