@@ -1,13 +1,13 @@
 MooTools Scrollbar
 ==================
 
-A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
+A simple Apple-style productbrowser (extends Slider) for MooTools 1.3.x.
 
 ![Screenshot](http://www.mild.ch/assets/images/scrollbar/snip.png)
 
 ### Features
 
- * **new** mouse wheel support
+ * mouse wheel support
  * Animated scrolling
  * Flexible
  * Lightweight
@@ -26,23 +26,24 @@ First argument should contain an element with an overflow, for example all your 
 
 ### Options
 
-Split into three parts
+see [Slider](http://mootools.net/docs/more/Drag/Slider)
 
- * **scroll**: see [Fx.Scroll](http://mootools.net/docs/more/Fx/Fx.Scroll)
- * **slider**: see [Slider](http://mootools.net/docs/more/Drag/Slider)
- * **knob**: options for the Tween instance of the slider knob, see [Fx.Tween](http://mootools.net/docs/core/Fx/Fx.Tween) and [Fx](http://mootools.net/docs/core/Fx/Fx)
+### Additional
+
+ * **scroll**: (Object) options for the container's Tween instance
+ * **knob**: (Object) options for the slider knob's Tween instance, see [Fx](http://mootools.net/docs/core/Fx/Fx) and [Fx.Tween](http://mootools.net/docs/core/Fx/Fx.Tween)
 
 Todo
 ----
 
  * code review
  * discuss API
- * remove Fx.Scroll dependecy (Version 2.0)
- * update to MooTools 1.3 (without compatibility)
  
 Changelog
 ---------
 
+ * removed Fx.Scroll dependency
+ * updated to MooTools 1.3 (without compatibility)
  * added mouse wheel support
  * backported to MooTools 1.11
  * added to MooTools 1.3 ßeta 1 example
