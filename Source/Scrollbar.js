@@ -2,15 +2,19 @@
 ---
  
 name: Scrollbar
-description: A simple Apple-style productbrowser, that extends Slider using a container with Fx.Scroll.
 
-version: 0.9.9
-copyright: Enrique Erne (http://mild.ch)
+description: A simple Apple-style productbrowser, that extends Slider using a container.
+
+version: 2.0.0-wip
+
+copyright: Enrique Erne (http://mild.ch/)
+
 license: MIT License
+
 authors:
 - Enrique Erne
 
-requires: [Core/Class, Core/Element.Event, Core/Element.Dimensions, Core/Fx.Tween, Core/Fx.Transitions, Core/Selectors, More/Fx.Scroll, More/Slider]
+requires: [Core/Class, Core/Element.Event, Core/Element.Dimensions, Core/Fx.Tween, Core/Fx.Transitions, Core/Selectors, More/Slider]
 
 provides: ScrollBar
  
@@ -22,75 +26,81 @@ var ScrollBar = new Class({
 	Extends: Slider,
 
 	options: {
+		onTick: function(pos){
+			if (this.options.snap) pos = this.toPosition(this.step);
+			if (this.knobFx) this.knob.tween(this.property, pos);
+			else this.knob.setStyle(this.property, pos);
+		},
+		onChange: function(step){
+			this.scroll(step / this.ratioScroll);
+		},
+		/*onComplete: function(step){},*/
+		initialStep: 0,
+		snap: false,
+		offset: 0,
+		range: false,
+		wheel: true,
+		steps: 100,
+		mode: 'horizontal',
 		scroll: {
-			wheelStops: false/*
-			onStart: $empty,
-			onComplete: $empty*/
+			// onStart: function(){},
+			// onComplete: function(){},
+			duration: 2000,
+			link: 'cancel',
+			transition: 'elastic:out'
 		},
-		slider: {
-			mode: 'horizontal',
-			wheel: true/*
-			onChange: $empty(intStep),
-			onComplete: $empty(strStep)*/
-		},
-		knob: {/*
-			onStart: $empty*/
+		knob: {
+			duration: 1000,
+			transition: 'elastic:out',
+			link: 'cancel'
 		}
 	},
 
 	initialize: function(scroller, slider, knob, options){
-		this.knob = document.id(knob).set('tween', options.knob);
-		this.slider = document.id(slider);
-		this.scroller = document.id(scroller);
-		this.scrollElement = this.scroller.getFirst();
-		this.parent(this.slider, this.knob, $extend(this.options.slider, options.slider));
-		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
-		this.scroll = new Fx.Scroll(this.scroller, $extend(this.options.scroll, options.scroll));
-		this.scroller.addEvent('mousewheel', function(event){
+		this.setOptions(options);
+		this.container = document.id(scroller);
+		this.scroller = this.container.getFirst();
+		this.parent(slider, knob);
+		
+		this.scroller.set('tween', this.options.scroll);
+		this.knob.set('tween', this.options.knob);
+		
+		this.scrollFx = this.scroller.get('tween');
+		if (this.options.knob.duration || this.options.knob.transition) this.knobFx = this.knob.get('tween');
+		
+		if (this.options.wheel) this.container.addEvent('mousewheel', function(event){
 			this.element.fireEvent('mousewheel', event);
 		}.bind(this));
-		this.ratio = this.steps / (this.slider.getSize()[this.axis] - this.knob.getSize()[this.axis]);
+		
+		this.ratio = this.steps / (this.element.getSize()[this.axis] - this.knob.getSize()[this.axis]);
+		this.ratioScroll = this.steps / (this.scroller.getSize()[this.axis] - this.container.getSize()[this.axis]);
 	},
 	
-	move2: function(amount){
-		this.set(this.knob.getPosition(this.slider)[this.axis] + amount);
+	scroll: function(pos){
+		this.scroller.tween(this.property, -pos);
 	},
-
-	set: function(position){
-		if($type(position) === 'element') position = position.getPosition(this.scrollElement)[this.axis] / this.ratio;
-		position = position.limit(-this.options.offset, this.full -this.options.offset);
-		this.move(position * this.ratio);
-		this.knob.tween(this.property, position).get('tween').chain(function(){
-			this.fireEvent('complete', Math.round(position * this.ratio) + '');
-		}.bind(this));
-	},
-
-	move: function(position){
-		var to = $chk(position) ? position : this.step;
-		if (this.options.mode === 'vertical') this.scroll.cancel().start(0, to);
-		else this.scroll.cancel().start(to, 0);
-	},
-
+	
 	draggedKnob: function(){
 		this.parent();
-		if (this.options.mode === 'vertical') this.scroll.cancel().set(0, this.step);
-		else this.scroll.cancel().set(this.step);
+		this.scrollFx.cancel();
+		this.scroller.setStyle(this.property, -this.step / this.ratioScroll);
 	},
-
+	
 	clickedElement: function(event){
-		if (event.target === this.knob){
-			this.knob.get('tween').cancel();
-			return;
-		}
-		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
-		position = position.limit(-this.options.offset, this.full -this.options.offset);
-		this.set(position);
+		if (this.knobFx && event.target === this.knob) this.knobFx.cancel();
+		this.parent(event);
 	},
 	
 	scrolledElement: function(event){
+		if (this.knobFx) this.knobFx.cancel();
 		var mode = (this.options.mode == 'horizontal') ? (event.wheel < 0) : (event.wheel > 0);
-		this.move2(mode ? -this.stepSize * 100 : this.stepSize * 100);
+		this.set(this.step + 10 * ((mode) ? -this.stepSize : this.stepSize));
 		event.stop();
+	},
+	
+	set: function(pos){
+		if (typeOf(pos) === 'element') pos = pos.getPosition(this.scroller)[this.axis] * this.ratioScroll;
+		this.parent(pos);
 	}
 
 });

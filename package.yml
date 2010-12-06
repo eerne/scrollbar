@@ -3,9 +3,9 @@ name: "Scrollbar"
 
 web: "[mootools.net/forge/p/scrollbar](http://mootools.net/forge/p/scrollbar)"
 
-description: "MooTools Scrollbar class, a Slider married with Fx.Scroll"
+description: "MooTools Scrollbar class, a Slider"
 
-authors: "[Enrique Erne](http://mild.ch)"
+authors: "[Enrique Erne](http://mild.ch/)"
 
 license: "MIT License"
 
@@ -18,7 +18,7 @@ sources:
 
 author: tofu
 
-current: 0.9.9
+current: 2.0.0-wip
 
 demo: http://www.mild.ch/productslider/
 

@@ -1,13 +1,14 @@
 #products {
-	position: relative;
 	height: 180px;
-	width: 802px;
 	overflow: hidden;
+	position: relative;
+	width: 802px;
 }
 
 #products ul {
 	width: 3000px;
 	height: 180px;
+	position: relative;
 	background-color: #ddd;
 }
 
