@@ -2,9 +2,18 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">  
 	<title>Scrollbar</title>
 	
 	<link rel="stylesheet" media="all" type="text/css" href="Scrollbar.css" />
+	
+	<style type="text/css">
+		#products {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			user-select: none;
+		}
+	</style>
 	
 	<script type="text/javascript" src="mootools-core-1.3-full-nocompat.js"></script>
 	<script type="text/javascript" src="mootools-more-1.3.js"></script>
@@ -15,31 +24,12 @@
 	<script type="text/javascript">
 
 window.addEvent('domready', function(){
-	var myProducts = new ScrollBar('products', 'bar', 'knob', {
+
+	var TouchSlider = new ScrollBar('products', 'bar', 'knob', {
 		offset: -1
 	});
 	
-	//myProducts.set(50);
-	
-	document.id('move0').addEvent('click', function(){ myProducts.set(0); });
-	document.id('move33').addEvent('click', function(){ myProducts.set(33); });
-	document.id('move90').addEvent('click', function(){ myProducts.set(90); });
-	
-	var products = $$('#products li');
-	document.id('move1st').addEvent('click', function(){ myProducts.set(products[0]); });
-	document.id('move2nd').addEvent('click', function(){ myProducts.set(products[1]); });
-	document.id('move3rd').addEvent('click', function(){ myProducts.set(products[2]); });
-	
-	
-	// if your link is on the slider
-	document.id('theSixth').addEvents({
-		'mousedown': function(event){
-			event.stop();
-		},
-		'click': function(){
-			myProducts.set(products[5]);
-		}
-	});
+	//myProducts.set(0);
 	
 });
 
@@ -50,9 +40,6 @@ window.addEvent('domready', function(){
 
 
 <h1>Example 1:</h1>
-
-move knob to <a id="move0" href="#">0</a> <a id="move33" href="#">33%</a> <a id="move90" href="#">90%</a> <br />
-move to element <a id="move1st" href="#">1st</a> <a id="move2nd" href="#">2nd</a> <a id="move3rd" href="#">3rd</a><br />
 
 
 <div id="products">
@@ -74,11 +61,14 @@ move to element <a id="move1st" href="#">1st</a> <a id="move2nd" href="#">2nd</a
 		<li>14</li>
 	</ul>
 </div>
-<div id="bar"><div id="knob"></div><a href="#" id="theSixth">goto 6th</a></div>
+
+<div id="bar"><div id="knob"></div></div>
 
 
 
-<p>github: <a href="http://github.com/eerne/scrollbar/">http://github.com/eerne/scrollbar/</a></p>
+<p><br />
+<br />
+<br />github: <a href="http://github.com/eerne/scrollbar/">http://github.com/eerne/scrollbar/</a></p>
 
 
 </body>

@@ -2,7 +2,7 @@
 	height: 180px;
 	overflow: hidden;
 	position: relative;
-	width: 802px;
+	width: 600px;
 }
 
 #products ul {
@@ -26,7 +26,7 @@
 
 #bar {
 	top: 0;
-	left: 100px;
+	left: 0;
 	width: 600px;
 	height: 21px;
 	position: relative;

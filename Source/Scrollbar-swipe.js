@@ -16,7 +16,7 @@ authors:
 
 requires: [ScrollBar, Mobile/Mouse, Mobile/Swipe]
 
-provides: ScrollBarSwipe
+provides: ScrollBar.swipedElement
  
 ...
 */
@@ -26,11 +26,22 @@ ScrollBar.implement({
 	attach: function(){
 		this.parent();
 		this.container.store('swipe:cancelVertical', true);
-		this.container.addEvent('swipe', function(event){
-			//event.direction
-			console.log(event.start.x - event.end.x);
-			this.fireEvent('mousewheel', event);
-		});
+		this.swipedElement = this.swipedElement.bind(this);
+		this.container.addEvent('swipe', this.swipedElement);
+		//this.knob.addEvent('touch', this.clickedElement);
+	},
+	
+	detach: function(){
+		this.parent();
+		this.container.removeEvent('swipe', this.swipedElement);
+		//this.knob.removeEvent('touch', this.clickedElement);
+	},
+	
+	swipedElement: function(event){
+		//console.log(event.direction);
+		var delta = event.start[this.axis] - event.end[this.axis];
+		this.set(this.step + delta);
+		event.stop();
 	}
 	
 });

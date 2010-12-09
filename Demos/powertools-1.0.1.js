@@ -1,4 +1,43 @@
-// packager build Mobile/Mouse Mobile/Swipe
+// packager build Mobile/Browser.Mobile Mobile/Mouse Mobile/Touch Mobile/Click Mobile/Pinch Mobile/Swipe Mobile/Touchhold
+/*
+---
+
+name: Browser.Mobile
+
+description: Provides useful information about the browser environment
+
+authors: Christoph Pojer (@cpojer)
+
+license: MIT-style license.
+
+requires: [Core/Browser]
+
+provides: Browser.Mobile
+
+...
+*/
+
+(function(){
+
+Browser.Device = {
+	name: 'other'
+};
+
+if (Browser.Platform.ios){
+	var device = navigator.userAgent.toLowerCase().match(/(ip(ad|od|hone))/)[0];
+	
+	Browser.Device[device] = true;
+	Browser.Device.name = device;
+}
+
+if (this.devicePixelRatio == 2)
+	Browser.hasHighResolution = true;
+
+Browser.isMobile = !['mac', 'linux', 'win'].contains(Browser.Platform.name);
+
+})();
+
+
 /*
 ---
 
@@ -199,6 +238,170 @@ Element.defineCustomEvent('touchstart', {
 /*
 ---
 
+name: Touch
+
+description: Provides a custom touch event on mobile devices
+
+authors: Christoph Pojer (@cpojer)
+
+license: MIT-style license.
+
+requires: [Core/Element.Event, Custom-Event/Element.defineCustomEvent, Browser.Features.Touch]
+
+provides: Touch
+
+...
+*/
+
+(function(){
+
+var preventDefault = function(event){
+	event.preventDefault();
+};
+
+var disabled;
+
+Element.defineCustomEvent('touch', {
+
+	base: 'touchend',
+
+	condition: function(event){
+		if (disabled || event.targetTouches.length != 0) return false;
+
+		var touch = event.changedTouches[0],
+			target = document.elementFromPoint(touch.clientX, touch.clientY);
+
+		do {
+			if (target == this) return true;
+		} while ((target = target.parentNode) && target);
+
+		return false;
+	},
+
+	onSetup: function(){
+		this.addEvent('touchstart', preventDefault);
+	},
+
+	onTeardown: function(){
+		this.removeEvent('touchstart', preventDefault);
+	},
+
+	onEnable: function(){
+		disabled = false;
+	},
+
+	onDisable: function(){
+		disabled = true;
+	}
+
+});
+
+})();
+
+
+/*
+---
+
+name: Click
+
+description: Provides a replacement for click events on mobile devices
+
+authors: Christoph Pojer (@cpojer)
+
+license: MIT-style license.
+
+requires: [Touch]
+
+provides: Click
+
+...
+*/
+
+if (Browser.Features.iOSTouch) (function(){
+
+var name = 'click';
+delete Element.NativeEvents[name];
+
+Element.defineCustomEvent(name, {
+
+	base: 'touch'
+
+});
+
+})();
+
+
+/*
+---
+
+name: Pinch
+
+description: Provides a custom pinch event for touch devices
+
+authors: Christopher Beloch (@C_BHole), Christoph Pojer (@cpojer)
+
+license: MIT-style license.
+
+requires: [Core/Element.Event, Custom-Event/Element.defineCustomEvent, Browser.Features.Touch]
+
+provides: Pinch
+
+...
+*/
+
+if (Browser.Features.Touch) (function(){
+
+var name = 'pinch',
+	thresholdKey = name + ':threshold',
+	disabled, active;
+
+var events = {
+
+	touchstart: function(event){
+		if (event.targetTouches.length == 2) active = true;
+	},
+
+	touchmove: function(event){
+		event.preventDefault();
+
+		if (disabled || !active) return;
+
+		var threshold = this.retrieve(thresholdKey, 0.5);
+		if (event.scale < (1 + threshold) && event.scale > (1 - threshold)) return;
+
+		active = false;
+		event.pinch = (event.scale > 1) ? 'in' : 'out';
+		this.fireEvent(name, event);
+	}
+
+};
+
+Element.defineCustomEvent(name, {
+
+	onSetup: function(){
+		this.addEvents(events);
+	},
+
+	onTeardown: function(){
+		this.removeEvents(events);
+	},
+
+	onEnable: function(){
+		disabled = false;
+	},
+
+	onDisable: function(){
+		disabled = true;
+	}
+
+});
+
+})();
+
+
+/*
+---
+
 name: Swipe
 
 description: Provides a custom swipe event for touch devices
@@ -286,6 +489,77 @@ Element.defineCustomEvent(name, {
 	onDisable: function(){
 		disabled = true;
 		clean();
+	}
+
+});
+
+})();
+
+
+/*
+---
+
+name: Touchhold
+
+description: Provides a custom touchhold event for touch devices
+
+authors: Christoph Pojer (@cpojer)
+
+license: MIT-style license.
+
+requires: [Core/Element.Event, Custom-Event/Element.defineCustomEvent, Browser.Features.Touch]
+
+provides: Touchhold
+
+...
+*/
+
+(function(){
+
+var name = 'touchhold',
+	delayKey = name + ':delay',
+	disabled, timer;
+
+var clear = function(e){
+	clearTimeout(timer);
+};
+
+var events = {
+
+	touchstart: function(event){
+		if (event.touches.length > 1){
+			clear();
+			return;
+		}
+		
+		timer = (function(){
+			this.fireEvent(name, event);
+		}).delay(this.retrieve(delayKey) || 750, this);
+	},
+
+	touchmove: clear,
+	touchcancel: clear,
+	touchend: clear
+
+};
+
+Element.defineCustomEvent(name, {
+
+	onSetup: function(){
+		this.addEvents(events);
+	},
+
+	onTeardown: function(){
+		this.removeEvents(events);
+	},
+
+	onEnable: function(){
+		disabled = false;
+	},
+
+	onDisable: function(){
+		disabled = true;
+		clear();
 	}
 
 });
