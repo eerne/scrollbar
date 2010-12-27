@@ -3,7 +3,7 @@ MooTools Scrollbar
 
 A simple Apple-style productbrowser (extends Slider) for MooTools 1.3.x.
 
-![Screenshot](scrollbar/raw/master/Docs/snip.png)
+![Screenshot](https://github.com/eerne/scrollbar/raw/master/Docs/snip.png)
 
 ### Features
 
