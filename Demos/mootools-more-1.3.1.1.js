@@ -30,8 +30,8 @@ provides: [MooTools.More]
 */
 
 MooTools.More = {
-	'version': '1.3.0.1',
-	'build': '6dce99bed2792dffcbbbb4ddc15a1fb9a41994b5'
+	'version': '1.3.1.1',
+	'build': '0292a3af1eea242b817fecf9daa127417d10d4ce'
 };
 
 
@@ -59,6 +59,7 @@ provides: [Class.Binds]
 */
 
 Class.Mutators.Binds = function(binds){
+	if (!this.prototype.initialize) this.implement('initialize', function(){});
 	return binds;
 };
 
@@ -365,23 +366,23 @@ var calculateEdgeSize = function(edge, styles){
 	return total;
 };
 
+var isVisible = function(el){
+	return !!(!el || el.offsetHeight || el.offsetWidth);
+};
+
 
 Element.implement({
 
 	measure: function(fn){
-		var visibility = function(el){
-			return !!(!el || el.offsetHeight || el.offsetWidth);
-		};
-		if (visibility(this)) return fn.apply(this);
+		if (isVisible(this)) return fn.call(this);
 		var parent = this.getParent(),
-			restorers = [],
 			toMeasure = [];
-		while (!visibility(parent) && parent != document.body){
+		while (!isVisible(parent) && parent != document.body){
 			toMeasure.push(parent.expose());
 			parent = parent.getParent();
 		}
-		var restore = this.expose();
-		var result = fn.apply(this);
+		var restore = this.expose(),
+			result = fn.call(this);
 		restore();
 		toMeasure.each(function(restore){
 			restore();
@@ -445,7 +446,8 @@ Element.implement({
 		}, options);
 
 		var styles = {},
-			size = {width: 0, height: 0};
+			size = {width: 0, height: 0},
+			dimensions;
 
 		if (options.mode == 'vertical'){
 			delete size.width;
@@ -455,16 +457,19 @@ Element.implement({
 			delete options.planes.height;
 		}
 
-
 		getStylesList(options.styles, options.planes).each(function(style){
 			styles[style] = this.getStyle(style).toInt();
 		}, this);
 
 		Object.each(options.planes, function(edges, plane){
 
-			var capitalized = plane.capitalize();
-			styles[plane] = this.getStyle(plane).toInt();
-			size['total' + capitalized] = styles[plane];
+			var capitalized = plane.capitalize(),
+				style = this.getStyle(plane);
+
+			if (style == 'auto' && !dimensions) dimensions = this.getDimensions();
+
+			style = styles[plane] = (style == 'auto') ? dimensions[plane] : style.toInt();
+			size['total' + capitalized] = style;
 
 			edges.each(function(edge){
 				var edgesize = calculateEdgeSize(edge, styles);
@@ -479,7 +484,7 @@ Element.implement({
 
 });
 
-})();
+}).call(this);
 
 
 /*
@@ -518,8 +523,7 @@ var Slider = new Class({
 		onChange: function(intStep){},
 		onComplete: function(strStep){},*/
 		onTick: function(position){
-			if (this.options.snap) position = this.toPosition(this.step);
-			this.knob.setStyle(this.property, position);
+			this.setKnobPosition(position);
 		},
 		initialStep: 0,
 		snap: false,
@@ -532,32 +536,34 @@ var Slider = new Class({
 
 	initialize: function(element, knob, options){
 		this.setOptions(options);
+		options = this.options;
 		this.element = document.id(element);
-		this.knob = document.id(knob);
+		knob = this.knob = document.id(knob);
 		this.previousChange = this.previousEnd = this.step = -1;
-		var offset, limit = {}, modifiers = {'x': false, 'y': false};
-		switch (this.options.mode){
+
+		var limit = {},
+			modifiers = {x: false, y: false},
+			offset;
+
+		switch (options.mode){
 			case 'vertical':
 				this.axis = 'y';
 				this.property = 'top';
-				offset = 'offsetHeight';
+				this.offset = 'offsetHeight';
 				break;
 			case 'horizontal':
 				this.axis = 'x';
 				this.property = 'left';
-				offset = 'offsetWidth';
+				this.offset = 'offsetWidth';
 		}
 
-		this.full = this.element.measure(function(){
-			this.half = this.knob[offset] / 2;
-			return this.element[offset] - this.knob[offset] + (this.options.offset * 2);
-		}.bind(this));
+		this.setSliderDimensions();
+		this.setRange(options.range);
 
-		this.setRange(this.options.range);
-
-		this.knob.setStyle('position', 'relative').setStyle(this.property, - this.options.offset);
+		if (knob.getStyle('position') == 'static') knob.setStyle('position', 'relative');
+		knob.setStyle(this.property, -options.offset);
 		modifiers[this.axis] = this.property;
-		limit[this.axis] = [- this.options.offset, this.full - this.options.offset];
+		limit[this.axis] = [-options.offset, this.full - options.offset];
 
 		var dragOptions = {
 			snap: 0,
@@ -577,14 +583,11 @@ var Slider = new Class({
 				this.end();
 			}.bind(this)
 		};
-		if (this.options.snap){
-			dragOptions.grid = Math.ceil(this.stepWidth);
-			dragOptions.limit[this.axis][1] = this.full;
-		}
+		if (options.snap) this.setSnap(dragOptions);
 
-		this.drag = new Drag(this.knob, dragOptions);
+		this.drag = new Drag(knob, dragOptions);
 		this.attach();
-		if (this.options.initialStep != null) this.set(this.options.initialStep)
+		if (options.initialStep != null) this.set(options.initialStep);
 	},
 
 	attach: function(){
@@ -595,9 +598,38 @@ var Slider = new Class({
 	},
 
 	detach: function(){
-		this.element.removeEvent('mousedown', this.clickedElement);
-		this.element.removeEvent('mousewheel', this.scrolledElement);
+		this.element.removeEvent('mousedown', this.clickedElement)
+			.element.removeEvent('mousewheel', this.scrolledElement);
 		this.drag.detach();
+		return this;
+	},
+
+	autosize: function(){
+		this.setSliderDimensions()
+			.setKnobPosition(this.toPosition(this.step));
+		this.drag.options.limit[this.axis] = [-this.options.offset, this.full - this.options.offset];
+		if (this.options.snap) this.setSnap();
+		return this;
+	},
+
+	setSnap: function(options){
+		if (!options) options = this.drag.options;
+		options.grid = Math.ceil(this.stepWidth);
+		options.limit[this.axis][1] = this.full;
+		return this;
+	},
+
+	setKnobPosition: function(position){
+		if (this.options.snap) position = this.toPosition(this.step);
+		this.knob.setStyle(this.property, position);
+		return this;
+	},
+
+	setSliderDimensions: function(){
+		this.full = this.element.measure(function(){
+			this.half = this.knob[this.offset] / 2;
+			return this.element[this.offset] - this.knob[this.offset] + (this.options.offset * 2);
+		}.bind(this));
 		return this;
 	},
 
@@ -606,10 +638,9 @@ var Slider = new Class({
 		if (!((this.range > 0) ^ (step > this.max))) step = this.max;
 
 		this.step = Math.round(step);
-		this.checkStep();
-		this.fireEvent('tick', this.toPosition(this.step));
-		this.end();
-		return this;
+		return this.checkStep()
+			.fireEvent('tick', this.toPosition(this.step))
+			.end();
 	},
 
 	setRange: function(range, pos){
@@ -619,49 +650,57 @@ var Slider = new Class({
 		this.steps = this.options.steps || this.full;
 		this.stepSize = Math.abs(this.range) / this.steps;
 		this.stepWidth = this.stepSize * this.full / Math.abs(this.range);
-		this.set(Array.pick([pos, this.step]).floor(this.min).max(this.max));
+		if (range) this.set(Array.pick([pos, this.step]).floor(this.min).max(this.max));
 		return this;
 	},
 
 	clickedElement: function(event){
 		if (this.isDragging || event.target == this.knob) return;
 
-		var dir = this.range < 0 ? -1 : 1;
-		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
-		position = position.limit(-this.options.offset, this.full -this.options.offset);
+		var dir = this.range < 0 ? -1 : 1,
+			position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
+
+		position = position.limit(-this.options.offset, this.full - this.options.offset);
 
 		this.step = Math.round(this.min + dir * this.toStep(position));
-		this.checkStep();
-		this.fireEvent('tick', position);
-		this.end();
+
+		this.checkStep()
+			.fireEvent('tick', position)
+			.end();
 	},
 
 	scrolledElement: function(event){
 		var mode = (this.options.mode == 'horizontal') ? (event.wheel < 0) : (event.wheel > 0);
-		this.set(mode ? this.step - this.stepSize : this.step + this.stepSize);
+		this.set(this.step + (mode ? -1 : 1) * this.stepSize);
 		event.stop();
 	},
 
 	draggedKnob: function(){
-		var dir = this.range < 0 ? -1 : 1;
-		var position = this.drag.value.now[this.axis];
+		var dir = this.range < 0 ? -1 : 1,
+			position = this.drag.value.now[this.axis];
+
 		position = position.limit(-this.options.offset, this.full -this.options.offset);
+
 		this.step = Math.round(this.min + dir * this.toStep(position));
 		this.checkStep();
 	},
 
 	checkStep: function(){
-		if (this.previousChange != this.step){
-			this.previousChange = this.step;
-			this.fireEvent('change', this.step);
+		var step = this.step;
+		if (this.previousChange != step){
+			this.previousChange = step;
+			this.fireEvent('change', step);
 		}
+		return this;
 	},
 
 	end: function(){
-		if (this.previousEnd !== this.step){
-			this.previousEnd = this.step;
-			this.fireEvent('complete', this.step + '');
+		var step = this.step;
+		if (this.previousEnd !== step){
+			this.previousEnd = step;
+			this.fireEvent('complete', step + '');
 		}
+		return this;
 	},
 
 	toStep: function(position){
