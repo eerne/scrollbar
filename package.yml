@@ -9,7 +9,7 @@ authors: "[Enrique Erne](http://mild.ch)"
 
 license: "MIT License"
 
-copyright: "&copy; 2010, Enrique Erne"
+copyright: "&copy; 2011, Enrique Erne"
 
 sources:
   - "Source/Scrollbar.js"
@@ -18,9 +18,9 @@ sources:
 
 author: tofu
 
-current: 0.9.9
+current: 1.0.1
 
-demo: http://www.mild.ch/productslider/
+demo: http://2011.mild.ch/projects/productslider.html
 
 category: Interface
 

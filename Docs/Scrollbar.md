@@ -1,7 +1,7 @@
 Class: ScrollBar {#ScrollBar}
 ===============================
 
-Expect some API changes, it is still BETA!
+Expect some API changes in 2.0.0
 
 ### Notes:
 
