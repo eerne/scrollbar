@@ -5,17 +5,14 @@
 
 script: More.js
 
+name: More
+
 description: MooTools More
 
 license: MIT-style license
 
-authors:
-- Guillermo Rauch
-- Thomas Aylott
-- Scott Kyle
-
 requires:
-- core:1.2.4/MooTools
+  - Core/MooTools
 
 provides: [MooTools.More]
 
@@ -23,25 +20,28 @@ provides: [MooTools.More]
 */
 
 MooTools.More = {
-	'version': '1.2.4.4',
-	'build': '6f6057dc645fdb7547689183b2311063bd653ddf'
+	'version': '1.2.5.1',
+	'build': '254884f2b83651bf95260eed5c6cceb838e22d8e'
 };
+
 
 /*
 ---
 
 script: Class.Binds.js
 
+name: Class.Binds
+
 description: Automagically binds specified methods in a class to the instance of the class.
 
 license: MIT-style license
 
 authors:
-- Aaron Newton
+  - Aaron Newton
 
 requires:
-- core:1.2.4/Class
-- /MooTools.More
+  - Core/Class
+  - /MooTools.More
 
 provides: [Class.Binds]
 
@@ -68,6 +68,8 @@ Class.Mutators.initialize = function(initialize){
 
 script: Element.Measure.js
 
+name: Element.Measure
+
 description: Extends the Element native object to include methods useful in measuring dimensions.
 
 credits: "Element.measure / .expose methods by Daniel Steigerwald License: MIT-style license. Copyright: Copyright (c) 2008 Daniel Steigerwald, daniel.steigerwald.cz"
@@ -75,12 +77,12 @@ credits: "Element.measure / .expose methods by Daniel Steigerwald License: MIT-s
 license: MIT-style license
 
 authors:
-- Aaron Newton
+  - Aaron Newton
 
 requires:
-- core:1.2.4/Element.Style
-- core:1.2.4/Element.Dimensions
-- /MooTools.More
+  - Core/Element.Style
+  - Core/Element.Dimensions
+  - /MooTools.More
 
 provides: [Element.Measure]
 
@@ -145,29 +147,33 @@ Element.implement({
 	},
 
 	getComputedSize: function(options){
+		//legacy support for my stupid spelling error
+		if (options && options.plains) options.planes = options.plains;
+		
 		options = $merge({
 			styles: ['padding','border'],
-			plains: {
+			planes: {
 				height: ['top','bottom'],
 				width: ['left','right']
 			},
 			mode: 'both'
 		}, options);
+		
 		var size = {width: 0,height: 0};
 		switch (options.mode){
 			case 'vertical':
 				delete size.width;
-				delete options.plains.width;
+				delete options.planes.width;
 				break;
 			case 'horizontal':
 				delete size.height;
-				delete options.plains.height;
+				delete options.planes.height;
 				break;
 		}
 		var getStyles = [];
 		//this function might be useful in other places; perhaps it should be outside this function?
-		$each(options.plains, function(plain, key){
-			plain.each(function(edge){
+		$each(options.planes, function(plane, key){
+			plane.each(function(edge){
 				options.styles.each(function(style){
 					getStyles.push((style == 'border') ? style + '-' + edge + '-' + 'width' : style + '-' + edge);
 				});
@@ -176,10 +182,10 @@ Element.implement({
 		var styles = {};
 		getStyles.each(function(style){ styles[style] = this.getComputedStyle(style); }, this);
 		var subtracted = [];
-		$each(options.plains, function(plain, key){ //keys: width, height, plains: ['left', 'right'], ['top','bottom']
+		$each(options.planes, function(plane, key){ //keys: width, height, planes: ['left', 'right'], ['top','bottom']
 			var capitalized = key.capitalize();
 			size['total' + capitalized] = size['computed' + capitalized] = 0;
-			plain.each(function(edge){ //top, left, right, bottom
+			plane.each(function(edge){ //top, left, right, bottom
 				size['computed' + edge.capitalize()] = 0;
 				getStyles.each(function(style, i){ //padding, border, etc.
 					//'padding-left'.test('left') size['totalWidth'] = size['width'] + [padding-left]
@@ -217,18 +223,20 @@ Element.implement({
 
 script: Fx.Scroll.js
 
+name: Fx.Scroll
+
 description: Effect to smoothly scroll any element, including the window.
 
 license: MIT-style license
 
 authors:
-- Valerio Proietti
+  - Valerio Proietti
 
 requires:
-- core:1.2.4/Fx
-- core:1.2.4/Element.Event
-- core:1.2.4/Element.Dimensions
-- /MooTools.More
+  - Core/Fx
+  - Core/Element.Event
+  - Core/Element.Dimensions
+  - /MooTools.More
 
 provides: [Fx.Scroll]
 
@@ -266,7 +274,7 @@ Fx.Scroll = new Class({
 	set: function(){
 		var now = Array.flatten(arguments);
 		if (Browser.Engine.gecko) now = [Math.round(now[0]), Math.round(now[1])];
-		this.element.scrollTo(now[0], now[1]);
+		this.element.scrollTo(now[0] + this.options.offset.x, now[1] + this.options.offset.y);
 	},
 
 	compute: function(from, to, delta){
@@ -366,23 +374,27 @@ Fx.Scroll = new Class({
 
 script: Drag.js
 
+name: Drag
+
 description: The base Drag Class. Can be used to drag and resize Elements using mouse events.
 
 license: MIT-style license
 
 authors:
-- Valerio Proietti
-- Tom Occhinno
-- Jan Kassens
+  - Valerio Proietti
+  - Tom Occhinno
+  - Jan Kassens
 
 requires:
-- core:1.2.4/Events
-- core:1.2.4/Options
-- core:1.2.4/Element.Event
-- core:1.2.4/Element.Style
-- /MooTools.More
+  - Core/Events
+  - Core/Options
+  - Core/Element.Event
+  - Core/Element.Style
+  - Core/Element.Dimensions
+  - /MooTools.More
 
 provides: [Drag]
+...
 
 */
 
@@ -450,18 +462,41 @@ var Drag = new Class({
 		this.fireEvent('beforeStart', this.element);
 		var limit = this.options.limit;
 		this.limit = {x: [], y: []};
-		for (var z in this.options.modifiers){
+		var styles = this.element.getStyles('left', 'right', 'top', 'bottom');
+		this._invert = {
+			x: this.options.modifiers.x == 'left' && styles.left == 'auto' &&
+			   !isNaN(styles.right.toInt()) && (this.options.modifiers.x = 'right'),
+			y: this.options.modifiers.y == 'top' && styles.top == 'auto' &&
+			   !isNaN(styles.bottom.toInt()) && (this.options.modifiers.y = 'bottom')
+		};
+
+		var z, coordinates;
+		for (z in this.options.modifiers){
 			if (!this.options.modifiers[z]) continue;
-			if (this.options.style) this.value.now[z] = this.element.getStyle(this.options.modifiers[z]).toInt();
+
+			var style = this.element.getStyle(this.options.modifiers[z]);
+
+			// Some browsers (IE and Opera) don't always return pixels.
+			if (style && !style.match(/px$/)){
+				if (!coordinates) coordinates = this.element.getCoordinates(this.element.getOffsetParent());
+				style = coordinates[this.options.modifiers[z]];
+			}
+
+			if (this.options.style) this.value.now[z] = (style || 0).toInt();
 			else this.value.now[z] = this.element[this.options.modifiers[z]];
+
 			if (this.options.invert) this.value.now[z] *= -1;
+			if (this._invert[z]) this.value.now[z] *= -1;
+
 			this.mouse.pos[z] = event.page[z] - this.value.now[z];
+
 			if (limit && limit[z]){
 				for (var i = 2; i--; i){
 					if ($chk(limit[z][i])) this.limit[z][i] = $lambda(limit[z][i])();
 				}
 			}
 		}
+
 		if ($type(this.options.grid) == 'number') this.options.grid = {x: this.options.grid, y: this.options.grid};
 		this.document.addEvents({mousemove: this.bound.check, mouseup: this.bound.cancel});
 		this.document.addEvent(this.selection, this.bound.eventStop);
@@ -487,6 +522,7 @@ var Drag = new Class({
 			if (!this.options.modifiers[z]) continue;
 			this.value.now[z] = this.mouse.now[z] - this.mouse.pos[z];
 			if (this.options.invert) this.value.now[z] *= -1;
+			if (this._invert[z]) this.value.now[z] *= -1;
 			if (this.options.limit && this.limit[z]){
 				if ($chk(this.limit[z][1]) && (this.value.now[z] > this.limit[z][1])){
 					this.value.now[z] = this.limit[z][1];
@@ -540,19 +576,20 @@ Element.implement({
 
 script: Slider.js
 
+name: Slider
+
 description: Class for creating horizontal and vertical slider controls.
 
 license: MIT-style license
 
 authors:
-- Valerio Proietti
+  - Valerio Proietti
 
 requires:
-- core:1.2.4/Element.Dimensions
-- /Class.Binds
-- /Drag
-- /Element.Dimensions
-- /Element.Measure
+  - Core/Element.Dimensions
+  - /Class.Binds
+  - /Drag
+  - /Element.Measure
 
 provides: [Slider]
 
@@ -605,14 +642,9 @@ var Slider = new Class({
 			return this.element[offset] - this.knob[offset] + (this.options.offset * 2); 
 		}.bind(this));
 		
-		this.min = $chk(this.options.range[0]) ? this.options.range[0] : 0;
-		this.max = $chk(this.options.range[1]) ? this.options.range[1] : this.options.steps;
-		this.range = this.max - this.min;
-		this.steps = this.options.steps || this.full;
-		this.stepSize = Math.abs(this.range) / this.steps;
-		this.stepWidth = this.stepSize * this.full / Math.abs(this.range) ;
+		this.setRange(this.options.range);
 
-		this.knob.setStyle('position', 'relative').setStyle(this.property, this.options.initialStep ? this.toPosition(this.options.initialStep) : - this.options.offset);
+		this.knob.setStyle('position', 'relative').setStyle(this.property, - this.options.offset);
 		modifiers[this.axis] = this.property;
 		limit[this.axis] = [- this.options.offset, this.full - this.options.offset];
 
@@ -641,6 +673,7 @@ var Slider = new Class({
 
 		this.drag = new Drag(this.knob, dragOptions);
 		this.attach();
+		if (this.options.initialStep != null) this.set(this.options.initialStep)
 	},
 
 	attach: function(){
@@ -665,6 +698,17 @@ var Slider = new Class({
 		this.checkStep();
 		this.fireEvent('tick', this.toPosition(this.step));
 		this.end();
+		return this;
+	},
+	
+	setRange: function(range, pos){
+		this.min = $pick(range[0], 0);
+		this.max = $pick(range[1], this.options.steps);
+		this.range = this.max - this.min;
+		this.steps = this.options.steps || this.full;
+		this.stepSize = Math.abs(this.range) / this.steps;
+		this.stepWidth = this.stepSize * this.full / Math.abs(this.range);
+		this.set($pick(pos, this.step).floor(this.min).max(this.max));
 		return this;
 	},
 
