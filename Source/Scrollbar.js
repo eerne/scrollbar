@@ -43,9 +43,9 @@ var ScrollBar = new Class({
 		this.slider = document.id(slider);
 		this.scroller = document.id(scroller);
 		this.scrollElement = this.scroller.getFirst();
+		this.scroll = new Fx.Scroll(this.scroller, $extend(this.options.scroll, options.scroll));
 		this.parent(this.slider, this.knob, $extend(this.options.slider, options.slider));
 		this.steps = this.scrollElement.getSize()[this.axis] - this.scroller.getSize()[this.axis];
-		this.scroll = new Fx.Scroll(this.scroller, $extend(this.options.scroll, options.scroll));
 		this.scroller.addEvent('mousewheel', function(event){
 			this.element.fireEvent('mousewheel', event);
 		}.bind(this));
@@ -80,7 +80,7 @@ var ScrollBar = new Class({
 	clickedElement: function(event){
 		if (event.target === this.knob){
 			this.knob.get('tween').cancel();
-			return;
+			return this;
 		}
 		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
 		position = position.limit(-this.options.offset, this.full -this.options.offset);
