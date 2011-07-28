@@ -8,6 +8,7 @@
 
 #vScroll ul {
 	height: 2000px;
+	position: relative;
 }
 
 #vScroll li {
