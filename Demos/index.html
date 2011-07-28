@@ -15,7 +15,15 @@
 
 window.addEvent('domready', function(){
 	var myProducts = new ScrollBar('products', 'bar', 'knob', {
-		offset: -1
+		offset: -1,
+		scroll: {
+			duration: 2000,
+			transition: 'elastic:out'
+		},
+		knob: {
+			duration: 1000,
+			transition: 'elastic:out'
+		}
 	});
 	
 	//myProducts.set(50);
@@ -46,6 +54,7 @@ window.addEvent('domready', function(){
 	<script type="text/javascript">
 
 window.addEvent('domready', function(){
+
 	var myVProducts = new ScrollBar('vScroll', 'vBar', 'vKnob', {
 		mode: 'vertical',
 		offset: -1
@@ -54,11 +63,11 @@ window.addEvent('domready', function(){
 	
 	document.id('aBitToTop').addEvent('click', function(e){
 		e.stop();
-		myVProducts.scroll(-50);
+		myVProducts.set(50);
 	});
 	document.id('aBitToBottom').addEvent('click', function(e){
 		e.stop();
-		myVProducts.scroll(50);
+		myVProducts.set(100);
 	});
 });
 

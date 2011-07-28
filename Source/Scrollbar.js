@@ -45,13 +45,13 @@ var ScrollBar = new Class({
 		scroll: {
 			// onStart: function(){},
 			// onComplete: function(){},
-			duration: 2000,
+			duration: 200,
 			link: 'cancel',
-			transition: 'elastic:out'
+			transition: 'linear'
 		},
 		knob: {
-			duration: 1000,
-			transition: 'elastic:out',
+			duration: 200,
+			transition: 'linear',
 			link: 'cancel'
 		}
 	},
