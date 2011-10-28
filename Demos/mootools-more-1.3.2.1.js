@@ -1,5 +1,5 @@
 // MooTools: the javascript framework.
-// Load this file's selection again by visiting: http://mootools.net/more/e05eb93e48601b00936e110baf366039 
+// Load this file's selection again by visiting: http://mootools.net/more/e05eb93e48601b00936e110baf366039
 // Or build this file again with packager using: packager build More/Slider
 /*
 ---
@@ -427,7 +427,7 @@ Element.implement({
 	},
 
 	getComputedSize: function(options){
-		
+
 
 		options = Object.merge({
 			styles: ['padding','border'],
