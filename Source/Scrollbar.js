@@ -28,8 +28,8 @@ var ScrollBar = new Class({
 	options: {
 		onTick: function(pos){
 			if (this.options.snap) pos = this.toPosition(this.step);
-			if (this.knobFx) this.knob.tween(this.property, pos);
-			else this.knob.setStyle(this.property, pos);
+			if (this.knobFx && pos > 0) this.knob.tween(this.property, pos);
+			else if(pos > 0) this.knob.setStyle(this.property, pos);
 		},
 		onChange: function(step){
 			this.scroll(step / this.ratioScroll);
@@ -77,7 +77,7 @@ var ScrollBar = new Class({
 	},
 	
 	scroll: function(pos){
-		this.scroller.tween(this.property, -pos);
+		if(pos > 0) this.scroller.tween(this.property, -pos);
 	},
 	
 	draggedKnob: function(){
